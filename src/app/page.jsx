@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
-import { Heart, Sparkles, PartyPopper, Quote } from "lucide-react";
+import { Heart, Sparkles, PartyPopper, Quote, Play } from "lucide-react";
 import confetti from "canvas-confetti";
 
 // Floating Hearts Background Component
@@ -91,7 +91,7 @@ const HeroSection = () => {
             A Special Question
           </span>
           <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-tight mb-4 md:mb-6 px-4">
-            <span className="bg-gradient-to-r from-pink-500 via-rose-500 to-red-500 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-pink-500 via-rose-500 to-red-500 bg-clip-text text-transparent">
               Will You Be
             </span>
             <br />
@@ -109,23 +109,181 @@ const HeroSection = () => {
           Every moment with you feels like a dream I never want to wake from. 
           Let me ask you something special...
         </motion.p>
+      </div>
+    </section>
+  );
+};
 
-        {/* Scroll indicator */}
-        {/* <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.2 }}
-          className="hidden md:block absolute bottom-8 left-1/2 -translate-x-1/2"
+// Video Memory Section Component
+const VideoMemorySection = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef(null);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+
+  const handlePlayClick = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  return (
+    <section ref={sectionRef} className="relative py-24 md:py-40 px-4">
+      {/* Background decoration */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-125 h-125 md:w-175 md:h-175 rounded-full bg-rose-500/5 blur-[180px]" />
+      </div>
+
+      <div className="relative z-10 max-w-full md:max-w-2xl lg:max-w-3xl mx-auto">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-8 md:mb-12"
         >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="flex flex-col items-center gap-2 text-gray-500"
-          >
-            <span className="text-sm tracking-wider uppercase">Scroll Down</span>
-            <div className="w-px h-12 bg-gradient-to-b from-gray-500 to-transparent" />
-          </motion.div>
-        </motion.div> */}
+          <h2 className="text-2xl sm:text-3xl md:text-5xl bg-linear-to-r from-pink-500 via-rose-500 to-red-500 bg-clip-text text-transparent mb-3 md:mb-4 font-bold px-4">
+            A Special Memory
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300 text-base md:text-lg px-4">
+            Captured moments of you being absolutely perfect
+          </p>
+        </motion.div>
+
+        {/* Video Container */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="relative group"
+        >
+          {/* Decorative frame corners */}
+          <div className="absolute -top-2 -left-2 w-8 h-8 md:-top-4 md:-left-4 md:w-12 md:h-12 border-t-2 border-l-2 border-pink-500/50 rounded-tl-lg z-20" />
+          <div className="absolute -top-2 -right-2 w-8 h-8 md:-top-4 md:-right-4 md:w-12 md:h-12 border-t-2 border-r-2 border-pink-500/50 rounded-tr-lg z-20" />
+          <div className="absolute -bottom-2 -left-2 w-8 h-8 md:-bottom-4 md:-left-4 md:w-12 md:h-12 border-b-2 border-l-2 border-pink-500/50 rounded-bl-lg z-20" />
+          <div className="absolute -bottom-2 -right-2 w-8 h-8 md:-bottom-4 md:-right-4 md:w-12 md:h-12 border-b-2 border-r-2 border-pink-500/50 rounded-br-lg z-20" />
+
+          {/* Video wrapper with gradient border effect */}
+          <div className="relative backdrop-blur-sm bg-white/5 dark:bg-black/5 border border-gray-200/20 dark:border-gray-700/20 rounded-2xl md:rounded-3xl p-2 md:p-4 overflow-hidden">
+            {/* Gradient border glow */}
+            <div className="absolute inset-0 bg-linear-to-r from-pink-500/20 via-rose-500/20 to-red-500/20 rounded-2xl md:rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            
+            {/* Video element */}
+            <div className="relative rounded-xl md:rounded-2xl overflow-hidden bg-gray-900">
+              <video
+                ref={videoRef}
+                className="w-full h-auto object-contain"
+                onClick={handlePlayClick}
+                onPlay={() => setIsPlaying(true)}
+                onPause={() => setIsPlaying(false)}
+                onEnded={() => setIsPlaying(false)}
+                playsInline
+              >
+                <source src="/Video 1.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+
+              {/* Play button overlay */}
+              <AnimatePresence>
+                {!isPlaying && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 flex items-center justify-center bg-black/30 backdrop-blur-sm cursor-pointer"
+                    onClick={handlePlayClick}
+                  >
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-linear-to-r from-pink-500 via-rose-500 to-red-500 flex items-center justify-center shadow-2xl shadow-pink-500/50"
+                    >
+                      <Play size={32} className="text-white fill-white ml-1 md:w-12 md:h-12 md:ml-2" />
+                    </motion.div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Floating hearts on video */}
+              <div className="absolute inset-0 pointer-events-none">
+                {[...Array(3)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="absolute"
+                    style={{
+                      left: `${20 + i * 30}%`,
+                      bottom: "-20px",
+                    }}
+                    animate={{
+                      y: [0, -300],
+                      opacity: [0, 0.6, 0],
+                      scale: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 4,
+                      delay: i * 1.5,
+                      repeat: Infinity,
+                      ease: "easeOut",
+                    }}
+                  >
+                    <Heart size={20} className="text-pink-500 fill-pink-500 md:w-6 md:h-6" />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            {/* Caption below video */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="mt-4 md:mt-6 text-center"
+            >
+              <p className="text-gray-700 dark:text-gray-200 text-base md:text-lg italic flex items-center justify-center gap-2">
+                <Heart size={16} className="text-pink-500 fill-pink-500 md:w-5 md:h-5" />
+                <span>You make every moment magical</span>
+                <Heart size={16} className="text-pink-500 fill-pink-500 md:w-5 md:h-5" />
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Decorative sparkles */}
+        <motion.div
+          animate={{ 
+            rotate: [0, 360],
+            scale: [1, 1.2, 1]
+          }}
+          transition={{ 
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="absolute top-8 right-8 md:top-16 md:right-16 z-20"
+        >
+          <Sparkles size={24} className="text-rose-400/50 md:w-8 md:h-8" />
+        </motion.div>
+
+        <motion.div
+          animate={{ 
+            rotate: [360, 0],
+            scale: [1, 1.3, 1]
+          }}
+          transition={{ 
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+          className="absolute bottom-8 left-8 md:bottom-16 md:left-16 z-20"
+        >
+          <Sparkles size={20} className="text-pink-400/50 md:w-7 md:h-7" />
+        </motion.div>
       </div>
     </section>
   );
@@ -144,10 +302,10 @@ const LoveMessageSection = () => {
   ];
 
   return (
-    <section ref={ref} className="relative py-16 md:py-32 px-4">
+    <section ref={ref} className="relative py-24 md:py-48 px-4 mt-16 md:mt-32">
       {/* Background decoration */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-pink-500/5 blur-[150px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-100 h-100 md:w-150 md:h-150 rounded-full bg-pink-500/5 blur-[150px]" />
       </div>
 
       {/* Polaroid Images - Decorative */}
@@ -155,7 +313,7 @@ const LoveMessageSection = () => {
         initial={{ opacity: 0, x: -100, rotate: -12 }}
         animate={isInView ? { opacity: 1, x: 0, rotate: -8 } : {}}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="absolute left-1 sm:left-2 md:left-8 -top-12 md:top-16 z-20"
+        className="absolute left-1 sm:left-2 md:left-8 -top-16 -md:top-18 z-20"
       >
         <div className="bg-white p-1.5 sm:p-2 md:p-3 shadow-2xl rotate-[-8deg] hover:rotate-[-4deg] transition-transform duration-300 w-30 md:w-48">
           <img 
@@ -173,9 +331,9 @@ const LoveMessageSection = () => {
         initial={{ opacity: 0, x: 100, rotate: 12 }}
         animate={isInView ? { opacity: 1, x: 0, rotate: 6 } : {}}
         transition={{ duration: 0.8, delay: 0.4 }}
-        className="absolute right-1 sm:right-2 md:right-8 -bottom-16 md:bottom-16 z-20"
+        className="absolute right-1 sm:right-2 md:right-8 -bottom-30 -md:bottom-18 z-20"
       >
-        <div className="bg-white p-1.5 sm:p-2 md:p-3 shadow-2xl rotate-[6deg] hover:rotate-[2deg] transition-transform duration-300 w-30 md:w-48">
+        <div className="bg-white p-1.5 sm:p-2 md:p-3 shadow-2xl rotate-6 hover:rotate-2 transition-transform duration-300 w-30 md:w-48">
           <img 
             src="/Memory 2.jpeg"
             alt="Memory 2"
@@ -197,10 +355,10 @@ const LoveMessageSection = () => {
         >
           <Quote size={36} className="text-rose-400/50 mx-auto mb-4 md:mb-6 md:w-12 md:h-12" />
           <blockquote className="text-xl sm:text-2xl md:text-4xl text-gray-900 dark:text-white leading-relaxed mb-4 md:mb-6">
-            "You are the finest, loveliest, and most beautiful person 
-            I have ever known and even that is an understatement."
+            "You make me so happy I can’t really explain it most 
+            of the time, and I love you so much for it."  
           </blockquote>
-          <cite className="text-gray-600 dark:text-gray-300 text-base md:text-lg">— David Oseni</cite>
+          <cite className="text-gray-600 dark:text-gray-300 text-base md:text-lg">— Egbugwo Daniel</cite>
         </motion.div>
 
         {/* Reasons section */}
@@ -210,7 +368,7 @@ const LoveMessageSection = () => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className="text-center mb-8 md:mb-12"
         >
-          <h2 className="text-2xl sm:text-3xl md:text-5xl bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 bg-clip-text text-transparent mb-3 md:mb-4 font-bold px-4">
+          <h2 className="text-2xl sm:text-3xl md:text-5xl bg-linear-to-r from-amber-500 via-yellow-500 to-amber-600 bg-clip-text text-transparent mb-3 md:mb-4 font-bold px-4">
             Why I Love You
           </h2>
           <p className="text-gray-600 dark:text-gray-300 text-base md:text-lg px-4">
@@ -227,7 +385,7 @@ const LoveMessageSection = () => {
               transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
               className="backdrop-blur-sm bg-white/5 dark:bg-black/5 border border-gray-200/20 dark:border-gray-700/20 rounded-xl md:rounded-2xl p-4 md:p-6 flex items-center gap-3 md:gap-4 group hover:border-pink-500/50 transition-all duration-300"
             >
-              <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-pink-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full bg-pink-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Heart size={18} className="text-pink-500 fill-pink-500/50 md:w-5 md:h-5" />
               </div>
               <p className="text-base md:text-lg text-gray-900 dark:text-white">{reason}</p>
@@ -296,7 +454,7 @@ const ValentineQuestion = () => {
     <section ref={ref} className="relative py-16 md:py-32 px-4 min-h-screen flex items-center justify-center">
       {/* Background glow */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] md:w-[800px] md:h-[800px] rounded-full bg-pink-500/5 blur-[200px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-150 h-150 md:w-200 md:h-200 rounded-full bg-pink-500/5 blur-[200px]" />
       </div>
 
       <div className="relative z-10 w-full max-w-2xl mx-auto">
@@ -326,16 +484,16 @@ const ValentineQuestion = () => {
                 So, what do you say?
               </h2>
               <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 md:mb-12 px-2">
-                Will you make me the happiest person alive?
+                Lota will you be my Valentine?
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center relative min-h-[100px] sm:min-h-[80px]">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center relative min-h-25 sm:min-h-20">
                 {/* Yes Button */}
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleYesClick}
-                  className="relative group px-8 sm:px-12 py-3 sm:py-4 rounded-full bg-gradient-to-r from-pink-500 via-rose-500 to-red-500 text-white font-bold text-lg sm:text-xl shadow-lg hover:shadow-pink-500/50 transition-all duration-300 w-full sm:w-auto"
+                  className="relative group px-8 sm:px-12 py-3 sm:py-4 rounded-full bg-linear-to-r from-pink-500 via-rose-500 to-red-500 text-white font-bold text-lg sm:text-xl shadow-lg hover:shadow-pink-500/50 transition-all duration-300 w-full sm:w-auto"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     Yes! <Heart size={18} className="fill-current sm:w-5 sm:h-5" />
@@ -379,7 +537,7 @@ const ValentineQuestion = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-3xl sm:text-4xl md:text-6xl bg-gradient-to-r from-pink-500 via-rose-500 to-red-500 bg-clip-text text-transparent font-bold mb-4 md:mb-6"
+                className="text-3xl sm:text-4xl md:text-6xl bg-linear-to-r from-pink-500 via-rose-500 to-red-500 bg-clip-text text-transparent font-bold mb-4 md:mb-6"
               >
                 YES!!!
               </motion.h2>
@@ -448,9 +606,10 @@ const Footer = () => {
 // Main App Component
 export default function App() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-red-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 font-serif relative overflow-x-hidden">
+    <div className="min-h-screen bg-linear-to-br from-pink-50 via-rose-50 to-red-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 font-serif relative overflow-x-hidden">
       <FloatingHearts />
       <HeroSection />
+      <VideoMemorySection />
       <LoveMessageSection />
       <ValentineQuestion />
       <Footer />
